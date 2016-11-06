@@ -3,6 +3,16 @@
   margin: 0 auto;
 }
 
-#chart .c3-line-weight {
-  stroke-width: 3px;
+h1 {
+  text-align: center;
+}
+
+.chart {
+  margin: 50px 0;
+}
+
+.chart .c3-line-weight,
+.chart .c3-line-weight-diff,
+.chart .c3-line-weight-diff-speed {
+  stroke-width: 2px;
 }
