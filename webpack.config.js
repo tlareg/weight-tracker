@@ -21,7 +21,7 @@ module.exports = {
   },
   output: {
     path: paths.dist,
-    publicPath: '/weight-tracker',
+    publicPath: isProd ? '/weight-tracker' : '/',
     filename: '[name].bundle.js'
   },
   module: {

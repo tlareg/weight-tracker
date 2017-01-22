@@ -4,18 +4,86 @@ import 'c3/c3.css';
 import c3 from 'c3';
 import weightData from './data/weight-data.json';
 
-(function init() {
+const averageStepInput = document.querySelector('.average-step-input')
+const refreshBtn = document.querySelector('.refresh-btn')
+
+refreshBtn.addEventListener('click', () => {
+  const averageStep = averageStepInput.value && parseInt(averageStepInput.value, 10) || 1
+  refresh({
+    weightData,
+    averageStep
+  })
+})
+
+
+// TODO: choosing dates from to
+refresh({
+  weightData,
+  averageStep: 1
+})
+
+function refresh(inputs) {
+  const { weightData, averageStep } = inputs
   const { timeline } = weightData;
+  const averageTimeline = createAverageTimeline(timeline, averageStep)
   
   const { 
     dates, 
     weights, 
     weightDiffs, 
     weightDiffSpeeds
-  } = processWeightTimeline(timeline);
+  } = processWeightTimeline(averageTimeline);
 
-  generateCharts({ dates, weights, weightDiffs, weightDiffSpeeds});
-})();
+  generateCharts({ 
+    dates, 
+    weights, 
+    weightDiffs, 
+    weightDiffSpeeds
+  });
+}
+
+function createAverageTimeline(originTimeline, averageStep) {
+  return originTimeline.reduce(({ newTimeline, averageItems }, item, index) => {
+    
+    const firstItemOfAverage = averageItems[0]
+    if (!firstItemOfAverage) {
+      return { newTimeline, averageItems: [item] }
+    } 
+    
+    const isLastItem = index === originTimeline.length - 1
+
+    const dateDaysDiff = dayDiff(
+      new Date(firstItemOfAverage.date),
+      new Date(item.date)
+    )
+
+    if (dateDaysDiff < averageStep) {
+      averageItems = [...averageItems, item]
+      if (!isLastItem) {
+        return { newTimeline, averageItems }
+      } 
+      return { newTimeline: [...newTimeline, createAverageWeightItem(averageItems)] } 
+    }
+
+    newTimeline = [...newTimeline, createAverageWeightItem(averageItems)]
+    if (isLastItem) {
+      newTimeline = [...newTimeline, item]
+    }
+    return {
+      newTimeline,
+      averageItems: [item]
+    }
+  }, { newTimeline: [], averageItems: [] }).newTimeline
+}
+
+function createAverageWeightItem(items) {
+  const sum = items.reduce((acc, item) => acc + parseFloat(item.weight), 0)
+  const averageWeight = round100(sum / items.length)
+  return {
+    date: items[items.length - 1].date,
+    weight: '' + averageWeight
+  }
+}
 
 function processWeightTimeline(timeline) {
   let dates = [];
@@ -93,6 +161,9 @@ function generateCharts({ dates, weights, weightDiffs, weightDiffSpeeds}) {
 function generateWeightChart({ dates, weights, dateAxisConfig }) {
   return c3.generate({
     bindto: '.weight-chart',
+    size: {
+      height: 960,
+    },
     data: {
       x: 'date',
       y: 'weight',
@@ -119,6 +190,9 @@ function generateWeightChart({ dates, weights, dateAxisConfig }) {
 function generateWeightDiffChart({ dates, weightDiffs, dateAxisConfig}) {
   return c3.generate({
     bindto: '.weight-diff-chart',
+    size: {
+      height: 250,
+    },
     data: {
       x: 'date',
       y: 'weight_diff',

@@ -16,3 +16,12 @@ h1 {
 .chart .c3-line-weight-diff-speed {
   stroke-width: 2px;
 }
+
+.settings {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.settings-item {
+  margin: 20px 0;
+}
