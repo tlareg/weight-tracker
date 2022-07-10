@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Weight Tracker</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="icon" type="image/svg+xml" href="/weight-tracker/assets/favicon.891ba843.ico" />
+    <script type="module" crossorigin src="/weight-tracker/assets/index.a80cbe5d.js"></script>
+    <link rel="stylesheet" href="/weight-tracker/assets/index.fbf61b2b.css">
+  </head>
+  <body>
+    <div class="content">
+      <h1>Weight Tracker</h1>
+
+      <div class="settings-container">
+        <div class="settings">
+          <div class="settings-item">
+            <label for="average_step">Average step [days]:</label>
+            <input type="text" name="average_step" class="average-step-input" />
+          </div>
+
+          <div class="settings-item">
+            <label for="date_from">Date from:</label>
+            <input id="date_from" type="date" name="date_from" class="date-from-input" />
+            <button onclick="javascript:date_from.value=''">X</button>
+          </div>
+
+          <div class="settings-item">
+            <label for="date_to">Date to:</label>
+            <input id="date_to" type="date" name="date_to" class="date-to-input" />
+            <button onclick="javascript:date_to.value=''">X</button>
+          </div>
+
+          <div class="settings-item">
+            <button class="refresh-btn">Refresh</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart weight-chart"></div>
+      <div class="chart weight-diff-speed-chart"></div>
+      <div class="chart weight-diff-chart"></div>
+    </div>
+
+    
+  </body>
+</html>
